@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image to HTML Converter</title>
+    <style>
+        /* 保持原有的样式代码不变 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        /* 省略其他样式代码... */
+    </style>
+</head>
+<body>
+    <h1>Upload Images to Convert them into a Single HTML File</h1>
+    <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="files[]" id="fileInput" multiple>
+        <button type="button" id="uploadButton">Upload and Convert</button>
+    </form>
+    <div id="progress" style="width: 0%; height: 2px; background-color: #007bff; margin-top: 10px;"></div>
+    <!-- 这里假设服务器将直接返回HTML内容，因此我们不需要下载链接 -->
+    <!-- <a href="#" id="downloadLink" download="converted.html">Download HTML File</a> -->
+    <div id="result"></div>
+
+    <script>
+        // 保持原有的事件监听器代码不变
+        const fileInput = document.getElementById('fileInput');
+        const uploadButton = document.getElementById('uploadButton');
+        const uploadForm = document.getElementById('uploadForm');
+        const progressBar = document.getElementById('progress');
+        const resultDiv = document.getElementById('result');
+
+        let totalFiles = 0;
+        let uploadedFiles = 0;
+
+        fileInput.addEventListener('change', () => {
+            totalFiles = fileInput.files.length;
+            uploadButton.disabled = false;
+            progressBar.style.width = '0%';
+            uploadedFiles = 0;
+        });
+
+        uploadButton.addEventListener('click', async () => {
+            uploadButton.disabled = true;
+            uploadForm.submit();
+        });
+
+        uploadForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(uploadForm);
+            const response = await fetch('/upload', { method: 'POST', body: formData });
+            const result = await response.text(); // 假设服务器返回的是文本形式的HTML
+            resultDiv.innerHTML = result; // 将结果直接显示在页面上
+        });
+    </script>
+</body>
+</html>

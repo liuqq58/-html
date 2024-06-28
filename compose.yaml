@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    image: your-image-name
+    container_name: your-container-name
+    network_mode: host
+    volumes:
+      - .:/app
+    command: python app.py
